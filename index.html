@@ -383,15 +383,6 @@
     .dl-btn:hover, .video-btn:hover, .share-btn:hover {
       transform: scale(1.02);
     }
-
-    .share-status-msg {
-      font-size: 11px;
-      color: #ff5555;
-      margin-top: 4px;
-      text-align: center;
-      min-height: 16px;
-      font-weight: 600;
-    }
   </style>
 </head>
 <body oncontextmenu="return false;" oncopy="return false;" oncut="return false;" ondragstart="return false;">
@@ -469,7 +460,6 @@
             <button class="share-btn" onclick="startShare(1)">
               <i class="fa-brands fa-whatsapp"></i> <span id="share-label-1">Share to Unlock (0/5)</span>
             </button>
-            <div class="share-status-msg" id="status-msg-1"></div>
 
             <a id="dl-btn-1" href="#" target="_blank" class="dl-btn disabled-btn">
               <i class="fa-solid fa-lock"></i> Download Soft Aim
@@ -499,7 +489,6 @@
             <button class="share-btn" onclick="startShare(2)">
               <i class="fa-brands fa-whatsapp"></i> <span id="share-label-2">Share to Unlock (0/5)</span>
             </button>
-            <div class="share-status-msg" id="status-msg-2"></div>
 
             <a id="dl-btn-2" href="#" target="_blank" class="dl-btn disabled-btn">
               <i class="fa-solid fa-lock"></i> Download Glitch File
@@ -567,16 +556,16 @@
 
     // OBFUSCATED ENCODED DOWNLOAD LINKS (Base64 protected)
     const encodedLinks = {
-      1: "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL2Z2czZoODhnZTg3eWY3bS9YSVRfU09GVF9BSU1fVjElMjVGMCUyNTlGJTI1ODclMjVBNyUyNUYwJTI1OUYlMjU8NyUyNUI3JTI1RjAlMjU5RiUyNThFJTI1QUYuN3ovZmlsZQ==",
+      1: "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL2Z2czZoODhnZTg3eWY3bS9YSVRfU09GVF9BSU1fVjElMjVGMCUyNTlGJTI1ODclMjVBNyUyNUYwJTI1OUYlMjU4NyUyNUI3JTI1RjAlMjU5RiUyNThFJTI1QUYuN3ovZmlsZQ==",
       2: "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlLzM1M29odXQwNnhpcjZ5ZS9GRUFSTEVTU19GUkVFU1RZTEVfVjFfJTI1RjAlMjU5RiUyNTg3JTI1QTclMjVGMCUyNTlGJTI1ODclMjNCNy56aXAvZmlsZQ=="
     };
 
-    // UPDATED WHATSAPP SHARE MESSAGE
+    // WHATSAPP SHARE MESSAGE
     const shareMessage = encodeURIComponent("*FREE SOFT AIM XIT AND SKIN TOOL ON THIS CHANNEL ✅*\n\n- SOFT AIM V1 LINK : https://softaimxfearless.netlify.app\n\n- https://whatsapp.com/channel/0029VbDIkfX3GJOotlw08M3E\n\nFollow Channel 👆Get some FREE Sensitivity Site & IOS and ANDROID free Files 🗿");
 
     const shareData = {
-      1: { count: 0, timeSent: 0 },
-      2: { count: 0, timeSent: 0 }
+      1: { count: 0 },
+      2: { count: 0 }
     };
 
     let activeShareFileId = null;
@@ -585,36 +574,25 @@
       if (shareData[fileId].count >= 5) return;
 
       activeShareFileId = fileId;
-      shareData[fileId].timeSent = Date.now();
-
-      document.getElementById(`status-msg-${fileId}`).textContent = "";
       window.open(`https://api.whatsapp.com/send?text=${shareMessage}`, '_blank');
     }
 
     window.addEventListener('focus', () => {
       if (activeShareFileId !== null) {
         const fileId = activeShareFileId;
-        const timeSpent = (Date.now() - shareData[fileId].timeSent) / 1000;
+        shareData[fileId].count++;
 
-        if (timeSpent < 3) {
-          shareData[fileId].count = 0;
-          document.getElementById(`share-label-${fileId}`).textContent = `Share to Unlock (${shareData[fileId].count}/5)`;
-          document.getElementById(`status-msg-${fileId}`).textContent = "Too fast! Share properly to unlock.";
+        if (shareData[fileId].count >= 5) {
+          document.getElementById(`share-label-${fileId}`).textContent = "Sharing Verified ✅";
+          
+          // Decode and reveal real URL upon 5 shares
+          const realUrl = atob(encodedLinks[fileId]);
+          const dlBtn = document.getElementById(`dl-btn-${fileId}`);
+          dlBtn.href = realUrl;
+          dlBtn.classList.remove('disabled-btn');
+          dlBtn.innerHTML = '<i class="fa-solid fa-download"></i> Download File';
         } else {
-          shareData[fileId].count++;
-          if (shareData[fileId].count >= 5) {
-            document.getElementById(`share-label-${fileId}`).textContent = "Sharing Verified ✅";
-            document.getElementById(`status-msg-${fileId}`).textContent = "";
-            
-            // Decode and reveal real URL only upon 5 verified shares
-            const realUrl = atob(encodedLinks[fileId]);
-            const dlBtn = document.getElementById(`dl-btn-${fileId}`);
-            dlBtn.href = realUrl;
-            dlBtn.classList.remove('disabled-btn');
-            dlBtn.innerHTML = '<i class="fa-solid fa-download"></i> Download File';
-          } else {
-            document.getElementById(`share-label-${fileId}`).textContent = `Share to Unlock (${shareData[fileId].count}/5)`;
-          }
+          document.getElementById(`share-label-${fileId}`).textContent = `Share to Unlock (${shareData[fileId].count}/5)`;
         }
 
         activeShareFileId = null;
