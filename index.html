@@ -6,8 +6,11 @@
   <title>Soft Aim V1 - Fearless Xits</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
-    /* ANTI-COPY CSS */
     * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
@@ -23,13 +26,6 @@
       --completed-gradient: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
       --card-bg: rgba(18, 18, 24, 0.88);
       --border-color: rgba(255, 255, 255, 0.12);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
 
     body {
@@ -253,7 +249,7 @@
     }
 
     .hidden {
-      display: none;
+      display: none !important;
     }
 
     .item-card {
@@ -383,9 +379,19 @@
     .dl-btn:hover, .video-btn:hover, .share-btn:hover {
       transform: scale(1.02);
     }
+    
+    .reset-progress {
+      background: transparent;
+      border: none;
+      color: #555;
+      font-size: 11px;
+      margin-top: 15px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
   </style>
 </head>
-<body oncontextmenu="return false;" oncopy="return false;" oncut="return false;" ondragstart="return false;">
+<body>
 
   <div class="wrapper">
     <div class="card">
@@ -411,7 +417,7 @@
           Complete all 3 verification steps below to unlock your target download links.
         </div>
 
-        <a href="https://whatsapp.com/channel/0029VbDIkfX3GJOotlw08M3E" target="_blank" class="step-btn" onclick="markComplete(this)">
+        <a href="https://whatsapp.com/channel/0029VbDIkfX3GJOotlw08M3E" target="_blank" class="step-btn" data-step="1" onclick="markStepComplete(1, this)">
           <div class="step-content">
             <i class="fa-brands fa-whatsapp left-icon"></i>
             <span>Join Main Channel</span>
@@ -419,7 +425,7 @@
           <div class="status-badge"><i class="fa-solid fa-lock"></i></div>
         </a>
 
-        <a href="https://whatsapp.com/channel/0029VbD11EtAYlUQxZMuK045" target="_blank" class="step-btn" onclick="markComplete(this)">
+        <a href="https://whatsapp.com/channel/0029VbD11EtAYlUQxZMuK045" target="_blank" class="step-btn" data-step="2" onclick="markStepComplete(2, this)">
           <div class="step-content">
             <i class="fa-brands fa-whatsapp left-icon"></i>
             <span>Join Backup Channel</span>
@@ -427,7 +433,7 @@
           <div class="status-badge"><i class="fa-solid fa-lock"></i></div>
         </a>
 
-        <a href="https://whatsapp.com/channel/0029Vb8dD7a5q08gPKk13w2R" target="_blank" class="step-btn" onclick="markComplete(this)">
+        <a href="https://whatsapp.com/channel/0029Vb8dD7a5q08gPKk13w2R" target="_blank" class="step-btn" data-step="3" onclick="markStepComplete(3, this)">
           <div class="step-content">
             <i class="fa-brands fa-whatsapp left-icon"></i>
             <span>Join Setup Channel</span>
@@ -457,7 +463,7 @@
           </div>
 
           <div class="btn-group">
-            <button class="share-btn" onclick="startShare(1)">
+            <button class="share-btn" onclick="executeShare(1)">
               <i class="fa-brands fa-whatsapp"></i> <span id="share-label-1">Share to Unlock (0/5)</span>
             </button>
 
@@ -486,7 +492,7 @@
           </div>
 
           <div class="btn-group">
-            <button class="share-btn" onclick="startShare(2)">
+            <button class="share-btn" onclick="executeShare(2)">
               <i class="fa-brands fa-whatsapp"></i> <span id="share-label-2">Share to Unlock (0/5)</span>
             </button>
 
@@ -500,104 +506,157 @@
           </div>
         </div>
 
+        <button class="reset-progress" onclick="resetState()">Reset session cache</button>
       </div>
 
     </div>
   </div>
 
   <script>
-    // ANTI-COPY JAVASCRIPT PROTECTIONS
-    document.addEventListener('keydown', function (e) {
-      if (
-        e.keyCode === 123 || 
-        (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 85 || e.keyCode === 83 || e.keyCode === 65 || e.keyCode === 73))
-      ) {
-        e.preventDefault();
-        return false;
+    (function () {
+      // Direct Obfuscated MediaFire links
+      var map = {
+        1: "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL2Z2czZoODhnZTg3eWY3bS9YSVRfU09GVF9BSU1fVjElMjVGMCUyNTlGJTI1ODclMjVBNyUyNUYwJTI1OUYlMjU4NyUyNUI3JTI1RjAlMjU5RiUyNThFJTI1QUYuN3ovZmlsZQ==",
+        2: "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlLzM1M29odXQwNnhpcjZ5ZS9GRUFSTEVTU19GUkVFU1RZTEVfVjFfJTI1RjAlMjU5RiUyNTg3JTI1QTclMjVGMCUyNTlGJTI1ODclMjNCNy56aXAvZmlsZQ=="
+      };
+
+      var shareText = encodeURIComponent("*FREE SOFT AIM XIT AND SKIN TOOL ON THIS CHANNEL ✅*\n\n- SOFT AIM V1 LINK : https://softaimxfearless.netlify.app\n\n- https://whatsapp.com/channel/0029VbDIkfX3GJOotlw08M3E\n\nFollow Channel 👆Get some FREE Sensitivity Site & IOS and ANDROID free Files 🗿");
+
+      // Memory Store Key
+      var STORAGE_KEY = 'fx_session_vault_v1';
+
+      // Load state safely for low RAM devices after tab drops
+      function loadVault() {
+        try {
+          var raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) return JSON.parse(raw);
+        } catch (err) {}
+        return {
+          steps: [false, false, false],
+          unlockedView: false,
+          shares: { 1: 0, 2: 0 }
+        };
       }
-    });
 
-    let completedSteps = 0;
-    const totalSteps = 3;
+      var vault = loadVault();
 
-    function markComplete(element) {
-      if (!element.classList.contains('completed')) {
-        element.classList.add('completed');
-        
-        const badge = element.querySelector('.status-badge');
-        badge.innerHTML = '<i class="fa-solid fa-check"></i>';
-        
-        completedSteps++;
-        document.getElementById('progress-text').textContent = `Steps Completed: ${completedSteps} / ${totalSteps}`;
+      function saveVault() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(vault));
+        } catch (err) {}
+      }
 
-        if (completedSteps >= totalSteps) {
-          const unlockBtn = document.getElementById('unlock-btn');
+      function updateLockerUI() {
+        var completedCount = 0;
+        var stepBtns = document.querySelectorAll('.step-btn');
+
+        stepBtns.forEach(function (btn, idx) {
+          if (vault.steps[idx]) {
+            btn.classList.add('completed');
+            btn.querySelector('.status-badge').innerHTML = '<i class="fa-solid fa-check"></i>';
+            completedCount++;
+          }
+        });
+
+        document.getElementById('progress-text').textContent = 'Steps Completed: ' + completedCount + ' / 3';
+
+        var unlockBtn = document.getElementById('unlock-btn');
+        if (completedCount >= 3) {
           unlockBtn.classList.add('active');
           unlockBtn.removeAttribute('disabled');
           unlockBtn.innerHTML = '<i class="fa-solid fa-lock-open" style="margin-right: 8px;"></i> Continue To Download';
         }
       }
-    }
 
-    function unlockContent() {
-      if (completedSteps >= totalSteps) {
-        document.getElementById('locker-view').classList.add('hidden');
-        document.getElementById('download-view').classList.remove('hidden');
-      }
-    }
+      function updateDownloadsUI() {
+        [1, 2].forEach(function (id) {
+          var count = vault.shares[id] || 0;
+          var label = document.getElementById('share-label-' + id);
+          var dlBtn = document.getElementById('dl-btn-' + id);
 
-    // Dynamic Live Counter
-    let count = 1248;
-    setInterval(() => {
-      const change = Math.floor(Math.random() * 7) - 3;
-      count = Math.max(1200, count + change);
-      document.getElementById('user-count').textContent = count.toLocaleString();
-    }, 3000);
+          if (count >= 5) {
+            label.textContent = "Sharing Verified ✅";
+            dlBtn.href = atob(map[id]);
+            dlBtn.classList.remove('disabled-btn');
+            dlBtn.innerHTML = '<i class="fa-solid fa-download"></i> Download File';
+          } else {
+            label.textContent = 'Share to Unlock (' + count + '/5)';
+          }
+        });
 
-    // OBFUSCATED ENCODED DOWNLOAD LINKS (Base64 protected)
-    const encodedLinks = {
-      1: "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL2Z2czZoODhnZTg3eWY3bS9YSVRfU09GVF9BSU1fVjElMjVGMCUyNTlGJTI1ODclMjVBNyUyNUYwJTI1OUYlMjU4NyUyNUI3JTI1RjAlMjU5RiUyNThFJTI1QUYuN3ovZmlsZQ==",
-      2: "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlLzM1M29odXQwNnhpcjZ5ZS9GRUFSTEVTU19GUkVFU1RZTEVfVjFfJTI1RjAlMjU5RiUyNTg3JTI1QTclMjVGMCUyNTlGJTI1ODclMjNCNy56aXAvZmlsZQ=="
-    };
-
-    // WHATSAPP SHARE MESSAGE
-    const shareMessage = encodeURIComponent("*FREE SOFT AIM XIT AND SKIN TOOL ON THIS CHANNEL ✅*\n\n- SOFT AIM V1 LINK : https://softaimxfearless.netlify.app\n\n- https://whatsapp.com/channel/0029VbDIkfX3GJOotlw08M3E\n\nFollow Channel 👆Get some FREE Sensitivity Site & IOS and ANDROID free Files 🗿");
-
-    const shareData = {
-      1: { count: 0 },
-      2: { count: 0 }
-    };
-
-    let activeShareFileId = null;
-
-    function startShare(fileId) {
-      if (shareData[fileId].count >= 5) return;
-
-      activeShareFileId = fileId;
-      window.open(`https://api.whatsapp.com/send?text=${shareMessage}`, '_blank');
-    }
-
-    window.addEventListener('focus', () => {
-      if (activeShareFileId !== null) {
-        const fileId = activeShareFileId;
-        shareData[fileId].count++;
-
-        if (shareData[fileId].count >= 5) {
-          document.getElementById(`share-label-${fileId}`).textContent = "Sharing Verified ✅";
-          
-          // Decode and reveal real URL upon 5 shares
-          const realUrl = atob(encodedLinks[fileId]);
-          const dlBtn = document.getElementById(`dl-btn-${fileId}`);
-          dlBtn.href = realUrl;
-          dlBtn.classList.remove('disabled-btn');
-          dlBtn.innerHTML = '<i class="fa-solid fa-download"></i> Download File';
-        } else {
-          document.getElementById(`share-label-${fileId}`).textContent = `Share to Unlock (${shareData[fileId].count}/5)`;
+        if (vault.unlockedView) {
+          document.getElementById('locker-view').classList.add('hidden');
+          document.getElementById('download-view').classList.remove('hidden');
         }
-
-        activeShareFileId = null;
       }
-    });
+
+      window.markStepComplete = function (stepIdx, el) {
+        vault.steps[stepIdx - 1] = true;
+        saveVault();
+        updateLockerUI();
+      };
+
+      window.unlockContent = function () {
+        var done = vault.steps.filter(Boolean).length;
+        if (done >= 3) {
+          vault.unlockedView = true;
+          saveVault();
+          updateDownloadsUI();
+        }
+      };
+
+      var activeTarget = null;
+
+      window.executeShare = function (id) {
+        if ((vault.shares[id] || 0) >= 5) return;
+        activeTarget = id;
+        window.open('https://api.whatsapp.com/send?text=' + shareText, '_blank');
+      };
+
+      window.addEventListener('focus', function () {
+        if (activeTarget !== null) {
+          var current = vault.shares[activeTarget] || 0;
+          if (current < 5) {
+            vault.shares[activeTarget] = current + 1;
+            saveVault();
+            updateDownloadsUI();
+          }
+          activeTarget = null;
+        }
+      });
+
+      window.resetState = function () {
+        try {
+          localStorage.removeItem(STORAGE_KEY);
+        } catch (e) {}
+        location.reload();
+      };
+
+      // Anti-Inspect & Anti-Copy logic
+      document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+      document.addEventListener('keydown', function (e) {
+        if (
+          e.keyCode === 123 || 
+          (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) ||
+          (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 83 || e.keyCode === 65 || e.keyCode === 67))
+        ) {
+          e.preventDefault();
+        }
+      });
+
+      // User Online Pulse
+      var onlineCounter = document.getElementById('user-count');
+      var baseCount = 1248;
+      setInterval(function () {
+        baseCount += Math.floor(Math.random() * 5) - 2;
+        if (baseCount < 1180) baseCount = 1180;
+        onlineCounter.textContent = baseCount.toLocaleString();
+      }, 4000);
+
+      // Initial Hydration
+      updateLockerUI();
+      updateDownloadsUI();
+    })();
   </script>
 </body>
 </html>
