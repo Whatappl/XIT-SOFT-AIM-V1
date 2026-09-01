@@ -312,6 +312,47 @@
       line-height: 1.3;
     }
 
+    /* SENSITIVITY BOX STYLING */
+    .sensi-box {
+      background: rgba(0, 198, 255, 0.08);
+      border: 1px solid rgba(0, 198, 255, 0.25);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 14px;
+    }
+
+    .sensi-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #00c6ff;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sensi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      font-size: 11px;
+      color: #ccc;
+    }
+
+    .sensi-item {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .sensi-item span {
+      font-weight: bold;
+      color: #ffcc00;
+    }
+
     .password-row {
       display: flex;
       align-items: center;
@@ -637,6 +678,18 @@
             <span><strong>Note:</strong> Ultra aim lock enabled. Safe for main accounts.</span>
           </div>
 
+          <div class="sensi-box">
+            <div class="sensi-title">
+              <i class="fa-solid fa-sliders"></i> Required Game Settings (If File Fails)
+            </div>
+            <div class="sensi-grid">
+              <div class="sensi-item">Gen: <span>130</span></div>
+              <div class="sensi-item">Redot: <span>0</span></div>
+              <div class="sensi-item">Camera Btn: <span>9</span></div>
+              <div class="sensi-item">Shoot Btn: <span>23</span></div>
+            </div>
+          </div>
+
           <div class="btn-group">
             <button class="share-btn" onclick="executeShare(1)">
               <i class="fa-brands fa-whatsapp"></i> <span id="share-label-1">Share to Unlock (0/5)</span>
@@ -729,7 +782,7 @@
   <script>
     (function () {
       var map = {
-        1: "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL2Z2czZoODhnZTg3eWY3bS9YSVRfU09GVF9BSU1fVjElMjVGMCUyNTlGJTI1ODclMjVBNyUyNUYwJTI1OUYlMjU8NyUyNUI3JTI1RjAlMjU9RiUyNThFJTI1QUYuN3ovZmlsZQ==",
+        1: "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL2Z2czZoODhnZTg3eWY3bS9YSVRfU09GVF9BSU1fVjElMjVGMCUyNTlGJTI1ODclMjVBNyUyNUYwJTI1OUYlMjU4NyUyNUI3JTI1RjAlMjU5RiUyNThFJTI1QUYuN3ovZmlsZQ==",
         2: "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlLzM1M29odXQwNnhpcjZ5ZS9GRUFSTEVTU19GUkVFU1RZTEVfVjFfJTI1RjAlMjU5RiUyNTg3JTI1QTclMjVGMCUyNTlGJTI1ODclMjNCNy56aXAvZmlsZQ=="
       };
 
@@ -910,6 +963,8 @@
           reply = "Fearless Xits is the legendary creator of safe Free Fire files, soft aim tools, and high-sensitivity glitches! 🗿👑";
         } else if (query.includes('password') || query.includes('pass')) {
           reply = "The password for the Skin Glitch zip file is: File_Free";
+        } else if (query.includes('sensi') || query.includes('settings') || query.includes('button')) {
+          reply = "If Soft Aim V1 isn't locking on: Set Gen = 130, Redot = 0, Camera Btn = 9, Shoot Btn = 23!";
         } else if (query.includes('safe') || query.includes('ban')) {
           reply = "Yes! All files provided by Fearless Xits are safe for main accounts when instructions are followed correctly.";
         } else if (query.includes('paid') || query.includes('buy') || query.includes('headshot')) {
@@ -954,3 +1009,4 @@
   </script>
 </body>
 </html>
+ 
