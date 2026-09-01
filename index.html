@@ -593,16 +593,6 @@
       border-radius: 8px;
       cursor: pointer;
     }
-
-    .reset-progress {
-      background: transparent;
-      border: none;
-      color: #555;
-      font-size: 11px;
-      margin-top: 15px;
-      cursor: pointer;
-      text-decoration: underline;
-    }
   </style>
 </head>
 <body>
@@ -733,8 +723,6 @@
             </a>
           </div>
         </div>
-
-        <button class="reset-progress" onclick="resetState()">Reset session cache</button>
       </div>
 
     </div>
@@ -782,34 +770,25 @@
   <script>
     (function () {
       var map = {
-        1: "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL2Z2czZoODhnZTg3eWY3bS9YSVRfU09GVF9BSU1fVjElMjVGMCUyNTlGJTI1ODclMjVBNyUyNUYwJTI1OUYlMjU4NyUyNUI3JTI1RjAlMjU5RiUyNThFJTI1QUYuN3ovZmlsZQ==",
+        1: "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL2Z2czZoODhnZTg3eWY3bS9YSVRfU09GVF9BSU1fVjElMjVGMCUyNTlGJTI1ODclMjVBNyUyNUYwJTI1OUYlMjU8NyUyNUI3JTI1RjAlMjU5RiUyNThFJTI1QUYuN3ovZmlsZQ==",
         2: "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlLzM1M29odXQwNnhpcjZ5ZS9GRUFSTEVTU19GUkVFU1RZTEVfVjFfJTI1RjAlMjU5RiUyNTg3JTI1QTclMjVGMCUyNTlGJTI1ODclMjNCNy56aXAvZmlsZQ=="
       };
 
       var shareText = encodeURIComponent("*FREE SOFT AIM XIT AND SKIN TOOL ON THIS CHANNEL ✅*\n\n- SOFT AIM V1 LINK : https://softaimxfearless.netlify.app\n\n- https://whatsapp.com/channel/0029VbDIkfX3GJOotlw08M3E\n\nFollow Channel 👆Get some FREE Sensitivity Site & IOS and ANDROID free Files 🗿");
 
-      var STORAGE_KEY = 'fx_session_vault_v2';
-
-      function loadVault() {
-        try {
-          var raw = localStorage.getItem(STORAGE_KEY);
-          if (raw) return JSON.parse(raw);
-        } catch (err) {}
-        return { steps: [false, false, false], unlockedView: false, shares: { 1: 0, 2: 0 } };
-      }
-
-      var vault = loadVault();
-
-      function saveVault() {
-        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(vault)); } catch (err) {}
-      }
+      // In-memory state (resets on page refresh)
+      var state = {
+        steps: [false, false, false],
+        unlockedView: false,
+        shares: { 1: 0, 2: 0 }
+      };
 
       function updateLockerUI() {
         var completedCount = 0;
         var stepBtns = document.querySelectorAll('.step-btn');
 
         stepBtns.forEach(function (btn, idx) {
-          if (vault.steps[idx]) {
+          if (state.steps[idx]) {
             btn.classList.add('completed');
             btn.querySelector('.status-badge').innerHTML = '<i class="fa-solid fa-check"></i>';
             completedCount++;
@@ -828,7 +807,7 @@
 
       function updateDownloadsUI() {
         [1, 2].forEach(function (id) {
-          var count = vault.shares[id] || 0;
+          var count = state.shares[id] || 0;
           var label = document.getElementById('share-label-' + id);
           var dlBtn = document.getElementById('dl-btn-' + id);
 
@@ -842,50 +821,42 @@
           }
         });
 
-        if (vault.unlockedView) {
+        if (state.unlockedView) {
           document.getElementById('locker-view').classList.add('hidden');
           document.getElementById('download-view').classList.remove('hidden');
         }
       }
 
       window.markStepComplete = function (stepNum) {
-        vault.steps[stepNum - 1] = true;
-        saveVault();
+        state.steps[stepNum - 1] = true;
         updateLockerUI();
       };
 
       window.unlockContent = function () {
-        var done = vault.steps.filter(Boolean).length;
+        var done = state.steps.filter(Boolean).length;
         if (done >= 3) {
-          vault.unlockedView = true;
-          saveVault();
+          state.unlockedView = true;
           updateDownloadsUI();
         }
       };
 
       var activeTarget = null;
       window.executeShare = function (id) {
-        if ((vault.shares[id] || 0) >= 5) return;
+        if ((state.shares[id] || 0) >= 5) return;
         activeTarget = id;
         window.open('https://api.whatsapp.com/send?text=' + shareText, '_blank');
       };
 
       window.addEventListener('focus', function () {
         if (activeTarget !== null) {
-          var current = vault.shares[activeTarget] || 0;
+          var current = state.shares[activeTarget] || 0;
           if (current < 5) {
-            vault.shares[activeTarget] = current + 1;
-            saveVault();
+            state.shares[activeTarget] = current + 1;
             updateDownloadsUI();
           }
           activeTarget = null;
         }
       });
-
-      window.resetState = function () {
-        try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-        location.reload();
-      };
 
       window.toggleVipModal = function (show) {
         var modal = document.getElementById('vip-modal');
