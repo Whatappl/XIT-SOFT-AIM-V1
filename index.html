@@ -38,12 +38,38 @@
       align-items: center;
       min-height: 100vh;
       padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* TOP RIGHT BUY VIP BUTTON */
+    .buy-vip-btn {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      z-index: 99;
+      background: linear-gradient(90deg, #ff0055, #ff9900);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 0 15px rgba(255, 0, 85, 0.6);
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      animation: pulse 2s infinite;
     }
 
     .wrapper {
       width: 100%;
       max-width: 440px;
       perspective: 1000px;
+      margin-top: 40px;
     }
 
     .card {
@@ -178,12 +204,6 @@
     .step-content {
       display: flex;
       align-items: center;
-    }
-
-    .step-btn:hover {
-      transform: translateY(-2px);
-      background: rgba(255, 255, 255, 0.12);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
     }
 
     .step-btn.completed {
@@ -326,14 +346,12 @@
       padding: 12px;
       background: var(--share-gradient);
       color: #fff;
-      text-decoration: none;
       border-radius: 10px;
       font-weight: 700;
       box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
       cursor: pointer;
       border: none;
       font-size: 14px;
-      transition: transform 0.2s;
     }
 
     .dl-btn {
@@ -349,7 +367,6 @@
       border-radius: 10px;
       font-weight: 700;
       box-shadow: 0 4px 15px rgba(0, 114, 255, 0.3);
-      transition: transform 0.2s;
     }
 
     .dl-btn.disabled-btn {
@@ -373,13 +390,169 @@
       border-radius: 10px;
       font-weight: 700;
       box-shadow: 0 4px 15px rgba(255, 65, 108, 0.3);
-      transition: transform 0.2s;
     }
 
-    .dl-btn:hover, .video-btn:hover, .share-btn:hover {
-      transform: scale(1.02);
+    /* VIP MODAL STYLING */
+    .vip-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
     }
-    
+
+    .vip-modal {
+      background: #161622;
+      border: 1px solid #ff9900;
+      border-radius: 20px;
+      padding: 24px;
+      max-width: 380px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(255, 153, 0, 0.3);
+      position: relative;
+    }
+
+    .vip-modal h2 {
+      color: #ffcc00;
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+
+    .bank-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px dashed rgba(255, 204, 0, 0.4);
+      border-radius: 12px;
+      padding: 14px;
+      margin: 15px 0;
+      text-align: left;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .bank-card strong { color: #ffcc00; }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 10px; right: 15px;
+      background: transparent;
+      border: none;
+      color: #aaa;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    /* DRAGGABLE CHATBOT STYLING */
+    #chatbot-widget {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      touch-action: none;
+    }
+
+    .chat-trigger {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      box-shadow: 0 8px 25px rgba(0, 114, 255, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      color: #fff;
+      cursor: move;
+      border: 2px solid #fff;
+    }
+
+    .chat-box {
+      position: absolute;
+      bottom: 65px;
+      right: 0;
+      width: 300px;
+      height: 380px;
+      background: #14141d;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: rgba(255,255,255,0.05);
+      padding: 12px;
+      font-weight: 700;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .chat-body {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .msg {
+      max-width: 85%;
+      padding: 8px 12px;
+      border-radius: 12px;
+      line-height: 1.4;
+    }
+
+    .msg.bot {
+      background: rgba(255, 255, 255, 0.08);
+      align-self: flex-start;
+      color: #ddd;
+    }
+
+    .msg.user {
+      background: #0072ff;
+      color: #fff;
+      align-self: flex-end;
+    }
+
+    .chat-input-area {
+      display: flex;
+      padding: 8px;
+      border-top: 1px solid var(--border-color);
+      background: rgba(0,0,0,0.2);
+    }
+
+    .chat-input-area input {
+      flex: 1;
+      background: rgba(255,255,255,0.08);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 12px;
+      outline: none;
+    }
+
+    .chat-input-area button {
+      background: #0072ff;
+      border: none;
+      color: #fff;
+      padding: 0 12px;
+      margin-left: 6px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
     .reset-progress {
       background: transparent;
       border: none;
@@ -393,6 +566,10 @@
 </head>
 <body>
 
+  <div class="buy-vip-btn" onclick="toggleVipModal(true)">
+    <i class="fa-solid fa-crown"></i> 99% Paid Script
+  </div>
+
   <div class="wrapper">
     <div class="card">
       
@@ -400,9 +577,7 @@
         <div class="new-month-badge">
           <i class="fa-solid fa-fire"></i> New Month Update
         </div>
-
         <br>
-
         <div class="live-counter">
           <span class="live-dot"></span>
           <span id="user-count">1,248</span> Active Users Online
@@ -417,7 +592,7 @@
           Complete all 3 verification steps below to unlock your target download links.
         </div>
 
-        <a href="https://whatsapp.com/channel/0029VbDIkfX3GJOotlw08M3E" target="_blank" class="step-btn" data-step="1" onclick="markStepComplete(1, this)">
+        <a href="https://whatsapp.com/channel/0029VbDIkfX3GJOotlw08M3E" target="_blank" class="step-btn" onclick="markStepComplete(1)">
           <div class="step-content">
             <i class="fa-brands fa-whatsapp left-icon"></i>
             <span>Join Main Channel</span>
@@ -425,7 +600,7 @@
           <div class="status-badge"><i class="fa-solid fa-lock"></i></div>
         </a>
 
-        <a href="https://whatsapp.com/channel/0029VbD11EtAYlUQxZMuK045" target="_blank" class="step-btn" data-step="2" onclick="markStepComplete(2, this)">
+        <a href="https://whatsapp.com/channel/0029VbD11EtAYlUQxZMuK045" target="_blank" class="step-btn" onclick="markStepComplete(2)">
           <div class="step-content">
             <i class="fa-brands fa-whatsapp left-icon"></i>
             <span>Join Backup Channel</span>
@@ -433,7 +608,7 @@
           <div class="status-badge"><i class="fa-solid fa-lock"></i></div>
         </a>
 
-        <a href="https://whatsapp.com/channel/0029Vb8dD7a5q08gPKk13w2R" target="_blank" class="step-btn" data-step="3" onclick="markStepComplete(3, this)">
+        <a href="https://whatsapp.com/channel/0029Vb8dD7a5q08gPKk13w2R" target="_blank" class="step-btn" onclick="markStepComplete(3)">
           <div class="step-content">
             <i class="fa-brands fa-whatsapp left-icon"></i>
             <span>Join Setup Channel</span>
@@ -512,38 +687,68 @@
     </div>
   </div>
 
+  <div id="vip-modal" class="vip-modal-overlay hidden">
+    <div class="vip-modal">
+      <button class="modal-close-btn" onclick="toggleVipModal(false)">&times;</button>
+      <h2><i class="fa-solid fa-fire"></i> 99% Headshot Script</h2>
+      <p style="font-size: 12px; color: #ccc;">Get the safest 99% Headshot VIP File for Main ID.</p>
+      
+      <div class="bank-card">
+        <div><strong>Bank Name:</strong> PalmPay</div>
+        <div><strong>Account Number:</strong> 8104117102</div>
+        <div><strong>Account Name:</strong> Micheal</div>
+      </div>
+
+      <p style="font-size: 11px; color: #aaa; margin-bottom: 12px;">Make payment to the account above, then click below to send receipt proof on WhatsApp.</p>
+      
+      <a href="https://wa.me/2349137895828?text=Hello%20Fearless%20Xits,%20I%20want%20to%20buy%20the%2099%25%20PAID%20HEADSHOT%20SCRIPT.%20Here%20is%20my%20payment%20proof." target="_blank" class="dl-btn" style="background: #25D366; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);">
+        <i class="fa-brands fa-whatsapp"></i> Send Payment Receipt
+      </a>
+    </div>
+  </div>
+
+  <div id="chatbot-widget">
+    <div id="chat-box" class="chat-box hidden">
+      <div class="chat-header">
+        <span><i class="fa-solid fa-robot"></i> Fearless AI Support</span>
+        <span style="cursor:pointer;" onclick="toggleChat()">&times;</span>
+      </div>
+      <div class="chat-body" id="chat-body">
+        <div class="msg bot">Hello! Ask me any question about the files or Fearless Xits 🗿</div>
+      </div>
+      <div class="chat-input-area">
+        <input type="text" id="chat-input" placeholder="Ask a question..." onkeydown="if(event.key==='Enter') sendMsg()">
+        <button onclick="sendMsg()"><i class="fa-solid fa-paper-plane"></i></button>
+      </div>
+    </div>
+    <div class="chat-trigger" id="chat-drag-handle" onclick="toggleChat()">
+      <i class="fa-solid fa-comments"></i>
+    </div>
+  </div>
+
   <script>
     (function () {
-      // Direct Obfuscated MediaFire links
       var map = {
-        1: "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL2Z2czZoODhnZTg3eWY3bS9YSVRfU09GVF9BSU1fVjElMjVGMCUyNTlGJTI1ODclMjVBNyUyNUYwJTI1OUYlMjU4NyUyNUI3JTI1RjAlMjU5RiUyNThFJTI1QUYuN3ovZmlsZQ==",
+        1: "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL2Z2czZoODhnZTg3eWY3bS9YSVRfU09GVF9BSU1fVjElMjVGMCUyNTlGJTI1ODclMjVBNyUyNUYwJTI1OUYlMjU8NyUyNUI3JTI1RjAlMjU9RiUyNThFJTI1QUYuN3ovZmlsZQ==",
         2: "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlLzM1M29odXQwNnhpcjZ5ZS9GRUFSTEVTU19GUkVFU1RZTEVfVjFfJTI1RjAlMjU5RiUyNTg3JTI1QTclMjVGMCUyNTlGJTI1ODclMjNCNy56aXAvZmlsZQ=="
       };
 
       var shareText = encodeURIComponent("*FREE SOFT AIM XIT AND SKIN TOOL ON THIS CHANNEL ✅*\n\n- SOFT AIM V1 LINK : https://softaimxfearless.netlify.app\n\n- https://whatsapp.com/channel/0029VbDIkfX3GJOotlw08M3E\n\nFollow Channel 👆Get some FREE Sensitivity Site & IOS and ANDROID free Files 🗿");
 
-      // Memory Store Key
-      var STORAGE_KEY = 'fx_session_vault_v1';
+      var STORAGE_KEY = 'fx_session_vault_v2';
 
-      // Load state safely for low RAM devices after tab drops
       function loadVault() {
         try {
           var raw = localStorage.getItem(STORAGE_KEY);
           if (raw) return JSON.parse(raw);
         } catch (err) {}
-        return {
-          steps: [false, false, false],
-          unlockedView: false,
-          shares: { 1: 0, 2: 0 }
-        };
+        return { steps: [false, false, false], unlockedView: false, shares: { 1: 0, 2: 0 } };
       }
 
       var vault = loadVault();
 
       function saveVault() {
-        try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(vault));
-        } catch (err) {}
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(vault)); } catch (err) {}
       }
 
       function updateLockerUI() {
@@ -590,8 +795,8 @@
         }
       }
 
-      window.markStepComplete = function (stepIdx, el) {
-        vault.steps[stepIdx - 1] = true;
+      window.markStepComplete = function (stepNum) {
+        vault.steps[stepNum - 1] = true;
         saveVault();
         updateLockerUI();
       };
@@ -606,7 +811,6 @@
       };
 
       var activeTarget = null;
-
       window.executeShare = function (id) {
         if ((vault.shares[id] || 0) >= 5) return;
         activeTarget = id;
@@ -626,13 +830,104 @@
       });
 
       window.resetState = function () {
-        try {
-          localStorage.removeItem(STORAGE_KEY);
-        } catch (e) {}
+        try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
         location.reload();
       };
 
-      // Anti-Inspect & Anti-Copy logic
+      window.toggleVipModal = function (show) {
+        var modal = document.getElementById('vip-modal');
+        if (show) modal.classList.remove('hidden');
+        else modal.classList.add('hidden');
+      };
+
+      // CHATBOT DRAG LOGIC
+      var widget = document.getElementById('chatbot-widget');
+      var handle = document.getElementById('chat-drag-handle');
+      var isDragging = false, currentX, currentY, initialX, initialY, xOffset = 0, yOffset = 0;
+
+      handle.addEventListener('touchstart', dragStart, false);
+      handle.addEventListener('touchend', dragEnd, false);
+      handle.addEventListener('touchmove', drag, false);
+      handle.addEventListener('mousedown', dragStart, false);
+      document.addEventListener('mouseup', dragEnd, false);
+      document.addEventListener('mousemove', drag, false);
+
+      function dragStart(e) {
+        var clientX = e.type === "touchstart" ? e.touches[0].clientX : e.clientX;
+        var clientY = e.type === "touchstart" ? e.touches[0].clientY : e.clientY;
+        initialX = clientX - xOffset;
+        initialY = clientY - yOffset;
+        if (e.target === handle || handle.contains(e.target)) {
+          isDragging = true;
+        }
+      }
+
+      function dragEnd() {
+        initialX = currentX;
+        initialY = currentY;
+        isDragging = false;
+      }
+
+      function drag(e) {
+        if (isDragging) {
+          e.preventDefault();
+          var clientX = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
+          var clientY = e.type === "touchmove" ? e.touches[0].clientY : e.clientY;
+          currentX = clientX - initialX;
+          currentY = clientY - initialY;
+          xOffset = currentX;
+          yOffset = currentY;
+          widget.style.transform = "translate3d(" + currentX + "px, " + currentY + "px, 0)";
+        }
+      }
+
+      var chatOpen = false;
+      window.toggleChat = function () {
+        if (!isDragging) {
+          chatOpen = !chatOpen;
+          var box = document.getElementById('chat-box');
+          if (chatOpen) box.classList.remove('hidden');
+          else box.classList.add('hidden');
+        }
+      };
+
+      window.sendMsg = function () {
+        var input = document.getElementById('chat-input');
+        var text = input.value.trim();
+        if (!text) return;
+
+        var body = document.getElementById('chat-body');
+        var userMsg = document.createElement('div');
+        userMsg.className = 'msg user';
+        userMsg.textContent = text;
+        body.appendChild(userMsg);
+        input.value = '';
+
+        var query = text.toLowerCase();
+        var reply = "I'm here to help! Complete the channel steps and WhatsApp shares to unlock all files safely.";
+
+        if (query.includes('fearless') || query.includes('xits')) {
+          reply = "Fearless Xits is the legendary creator of safe Free Fire files, soft aim tools, and high-sensitivity glitches! 🗿👑";
+        } else if (query.includes('password') || query.includes('pass')) {
+          reply = "The password for the Skin Glitch zip file is: File_Free";
+        } else if (query.includes('safe') || query.includes('ban')) {
+          reply = "Yes! All files provided by Fearless Xits are safe for main accounts when instructions are followed correctly.";
+        } else if (query.includes('paid') || query.includes('buy') || query.includes('headshot')) {
+          reply = "Click the '99% Paid Script' button at the top right corner to get the VIP headshot file directly from Micheal on WhatsApp!";
+        }
+
+        setTimeout(function () {
+          var botMsg = document.createElement('div');
+          botMsg.className = 'msg bot';
+          botMsg.textContent = reply;
+          body.appendChild(botMsg);
+          body.scrollTop = body.scrollHeight;
+        }, 500);
+
+        body.scrollTop = body.scrollHeight;
+      };
+
+      // Anti-Inspect
       document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
       document.addEventListener('keydown', function (e) {
         if (
@@ -653,7 +948,6 @@
         onlineCounter.textContent = baseCount.toLocaleString();
       }, 4000);
 
-      // Initial Hydration
       updateLockerUI();
       updateDownloadsUI();
     })();
